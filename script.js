@@ -1,5 +1,8 @@
 mapboxgl.accessToken = 'KEY HERE';
 
+// map variables
+const centerPoint = [-75.1652, 39.9526];
+
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v10',
@@ -19,21 +22,20 @@ var canvas = map.getCanvasContainer();
 var start = [-122.662323, 45.523751];
 
 // create a function to make a directions request
-function getRoute(end) {
+const getRoute = async (end) => {
     // make a directions request using cycling profile
     // an arbitrary start will always be the same
     // only the end or destination will change
     var start = [-122.662323, 45.523751];
     var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken;
 
-    // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
-    var req = new XMLHttpRequest();
-    req.open('GET', url, true);
-    req.onload = function () {
-        var json = JSON.parse(req.response);
-        var data = json.routes[0];
-        var route = data.geometry.coordinates;
-        var geojson = {
+    // Fetch route data
+    try {
+        const response = await fetch(url);
+        const routeInfo = await response.json();
+        const data = routeInfo.routes[0];
+        const route = data.geometry.coordinates;
+        const geojson = {
             type: 'Feature',
             properties: {},
             geometry: {
@@ -80,8 +82,9 @@ function getRoute(end) {
             tripInstructions.push('<br><li>' + steps[i].maneuver.instruction) + '</li>';
             instructions.innerHTML = '<br><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min 🚴 </span>' + tripInstructions;
         }
-    };
-    req.send();
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 map.on('load', function () {

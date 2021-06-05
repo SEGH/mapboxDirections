@@ -3,6 +3,9 @@ mapboxgl.accessToken = 'KEY_HERE';
 // map variables
 const centerPoint = [-75.1652, 39.9526];
 const startPoint = [-75.1800, 39.900]
+const startCircleColor = getComputedStyle(document.documentElement).getPropertyValue('--start-circle');
+const endCircleColor = getComputedStyle(document.documentElement).getPropertyValue('--end-circle');
+const routeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--route-line');
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -64,7 +67,7 @@ const getRoute = async (end) => {
                     'line-cap': 'round'
                 },
                 paint: {
-                    'line-color': '#3887be',
+                    'line-color': routeLineColor,
                     'line-width': 5,
                     'line-opacity': 0.75
                 }
@@ -110,7 +113,7 @@ map.on('load', function () {
         },
         paint: {
             'circle-radius': 10,
-            'circle-color': '#3887be'
+            'circle-color': startCircleColor
         }
     });
     map.on('click', function (e) {
@@ -153,7 +156,7 @@ map.on('load', function () {
                 },
                 paint: {
                     'circle-radius': 10,
-                    'circle-color': '#f30'
+                    'circle-color': endCircleColor
                 }
             });
         }

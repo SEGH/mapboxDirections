@@ -1,3 +1,9 @@
+:root {
+    --start-circle: #662E9B;
+    --end-circle: #EA3546;
+    --route-line: #43BCCD;
+}
+
 body {
     margin: 0;
     padding: 0;
